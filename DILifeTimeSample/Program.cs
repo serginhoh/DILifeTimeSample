@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//Transient
+//Registro dos Serviços
 builder.Services.AddTransient<IMessageTransient, Message>();
 builder.Services.AddScoped<IMessageScoped, Message>();
 builder.Services.AddSingleton<IMessageSingleton, Message>();
