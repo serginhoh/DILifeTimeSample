@@ -1,5 +1,6 @@
 using DILifeTimeSample.Contracts;
 using DILifeTimeSample.Models;
+using DILifeTimeSample.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IMessageTransient, Message>();
 builder.Services.AddScoped<IMessageScoped, Message>();
 builder.Services.AddSingleton<IMessageSingleton, Message>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 
 var app = builder.Build();
 
@@ -25,12 +27,14 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
-app.MapGet("/message", (IMessageTransient messageTransient, IMessageScoped messageScoped, IMessageSingleton messageSingleton) =>
+app.MapGet("/message", (IMessageTransient messageTransient, IMessageScoped messageScoped, IMessageSingleton messageSingleton, 
+    IMessageService messageService) =>
 {
     return new { 
         Transient = messageTransient.GuidId,
         Scoped = messageScoped.GuidId,
-        Singleton = messageSingleton.GuidId
+        Singleton = messageSingleton.GuidId,
+        ServiceMessage = messageService.GetMessage()
     };
 }).WithName("GetMessage");
 
